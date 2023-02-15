@@ -18,6 +18,17 @@ namespace ASP.Server.Database
       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Book>()
+            .HasMany(b => b.Genres)
+            .WithMany(g => g.Books)
+            .UsingEntity(j => j.ToTable("BookGenre"));
+
+            // Configure the navigation properties for the Book and Genre models
+            modelBuilder.Entity<Book>()
+                .HasIndex(b => b.Title); // example index for Book Name
+
+            modelBuilder.Entity<Genre>()
+                .HasIndex(g => g.Name);
 
             modelBuilder.Entity<Book>().ToTable("Book");
             modelBuilder.Entity<Genre>().ToTable("Genre");

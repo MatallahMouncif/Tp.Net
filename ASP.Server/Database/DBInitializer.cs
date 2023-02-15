@@ -19,20 +19,20 @@ namespace ASP.Server.Database
 
             Genre SF, Classic, Romance, Thriller;
             bookDbContext.Genre.AddRange(
-                SF = new Genre(),
-                Classic = new Genre(),
-                Romance = new Genre(),
-                Thriller = new Genre()
+                SF = new Genre() { Name = "SF"},
+                Classic = new Genre() { Name = "Classic" },
+                Romance = new Genre() { Name = "Romance" },
+                Thriller = new Genre() { Name = "Thriller" }
             );
             bookDbContext.SaveChanges();
 
             // Une fois les moèles complété Vous pouvez faire directement
             // new Book() { Author = "xxx", Name = "yyy", Price = n.nnf, Content = "ccc", Genres = new() { Romance, Thriller } }
             bookDbContext.Books.AddRange(
-                new Book(), 
-                new Book(),
-                new Book(),
-                new Book()
+                new Book() { Title = "SFBook", Genres = new() { SF } }, 
+                new Book() { Title = "ClassicBook", Genres = new() { Classic } },
+                new Book() { Title = "ThrillerRomanceBook", Genres = new() { Thriller, Romance } },
+                new Book() { Title = "ThrillerBook", Genres = new() { Thriller } }
             );
             // Vous pouvez initialiser la BDD ici
 
