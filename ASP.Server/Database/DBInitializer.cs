@@ -28,12 +28,23 @@ namespace ASP.Server.Database
 
             // Une fois les moèles complété Vous pouvez faire directement
             // new Book() { Author = "xxx", Name = "yyy", Price = n.nnf, Content = "ccc", Genres = new() { Romance, Thriller } }
-            bookDbContext.Books.AddRange(
-                new Book() { Title = "SFBook", Genres = new() { SF } }, 
-                new Book() { Title = "ClassicBook", Genres = new() { Classic } },
-                new Book() { Title = "ThrillerRomanceBook", Genres = new() { Thriller, Romance } },
-                new Book() { Title = "ThrillerBook", Genres = new() { Thriller } }
-            );
+            int i = 0;
+            for (; i < 25; i++)
+            {
+                bookDbContext.Books.Add(new Book() { Title = $"Book{i}", Genres = new() { SF} });
+            }
+            for(; i < 50 ; i++)
+            {
+                bookDbContext.Books.Add(new Book() { Title = $"Book{i}", Genres = new() { Classic } });
+            }
+            for (; i < 75; i++)
+            {
+                bookDbContext.Books.Add(new Book() { Title = $"Book{i}", Genres = new() { Romance } });
+            }
+            for (; i < 100; i++)
+            {
+                bookDbContext.Books.Add(new Book() { Title = $"Book{i}", Genres = new() { Thriller } });
+            }
             // Vous pouvez initialiser la BDD ici
 
             bookDbContext.SaveChanges();
