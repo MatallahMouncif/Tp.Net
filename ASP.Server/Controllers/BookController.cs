@@ -22,7 +22,7 @@ namespace ASP.Server.Controllers
         public string Author { get; set; }
         [Required]
         [Display(Name = "Prix")]
-        public decimal Price { get; set; }
+        public float Price { get; set; }
         
 
         // Liste des genres séléctionné par l'utilisateur
