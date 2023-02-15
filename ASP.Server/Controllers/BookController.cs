@@ -44,8 +44,9 @@ namespace ASP.Server.Controllers
         public ActionResult<IEnumerable<Book>> List()
         {
             // récupérer les livres dans la base de donées pour qu'elle puisse être affiché
-            List<Book> ListBooks = null;
-            return View(ListBooks);
+            List<Book> ListBooks = libraryDbContext.Books.Include(b => b.Genres).ToList();
+
+			return View(ListBooks);
         }
 
         public ActionResult<CreateBookModel> Create(CreateBookModel model)
