@@ -7,11 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ASP.Server.Database;
-
+using ASP.Server.DTO;
 namespace ASP.Server.Api
 {
 
-    [Route("/api/[controller]/[action]")]
+    [Route("/api/")]
     [ApiController]
     public class BookController : ControllerBase
     {
@@ -56,9 +56,65 @@ namespace ASP.Server.Api
 
 
         // Je vous montre comment faire la 1er, a vous de la compléter et de faire les autres !
-        public ActionResult<List<Book>> GetBooks()
+        [HttpGet]
+        [Route("book")]
+        public ActionResult<List<BookDTO>> GetBooks(int limit = 10, int offset = 0, [FromQuery] int[] idGenres = null)
         {
-            throw new NotImplementedException("You have to do it your self");
+            List<Book> books = new List<Book>();
+            int totalBooks = 0;
+            if (idGenres == null || idGenres.Length == 0)
+            {
+                totalBooks = libraryDbContext.Books.Count();
+                books = libraryDbContext.Books.Include(x => x.Genres).Skip(offset).Take(limit).ToList();
+            }
+            else
+            {
+                totalBooks = libraryDbContext.Books.Include(x => x.Genres).Where(x => x.Genres.Any(y => idGenres.Contains(y.Id))).Count();
+                books = libraryDbContext.Books.Include(x => x.Genres).Where(x => x.Genres.Any(y => idGenres.Contains(y.Id))).Skip(offset).Take(limit).ToList();
+            }
+            List<BookDTO> booksDTO = new List<BookDTO>();
+            foreach (Book book in books)
+            {
+                BookDTO bookDTO = new BookDTO();
+                bookDTO.Id = book.Id;
+                bookDTO.Title = book.Title;
+                bookDTO.Author = book.Author;
+                bookDTO.Price = book.Price;
+                bookDTO.Genres = new List<GenreDTO>();
+                foreach (Genre genre in book.Genres)
+                {
+                    GenreDTO genreDTO = new GenreDTO();
+                    genreDTO.Id = genre.Id;
+                    genreDTO.Name = genre.Name;
+                    bookDTO.Genres.Add(genreDTO);
+                }
+                booksDTO.Add(bookDTO);
+            }
+
+            int endIndex = offset + limit - 1;
+            endIndex = endIndex > totalBooks - 1 ? totalBooks - 1 : endIndex;
+            Response.Headers.Add("Pagination", $"{offset}-{endIndex}/{totalBooks}");
+            return booksDTO;
+        }
+        [HttpGet]
+        [Route("book/{id}")]
+        public ActionResult<Book> GetBook(int id)
+        {
+            Book book = libraryDbContext.Books.Include(x => x.Genres).First(x => x.Id == id);
+            BookDTO bookDTO = new BookDTO();
+            bookDTO.Id = book.Id;
+            bookDTO.Title = book.Title;
+            bookDTO.Author = book.Author;
+            bookDTO.Price = book.Price;
+            bookDTO.Genres = new List<GenreDTO>();
+            foreach (Genre genre in book.Genres)
+            {
+                GenreDTO genreDTO = new GenreDTO();
+                genreDTO.Id = genre.Id;
+                genreDTO.Name = genre.Name;
+                bookDTO.Genres.Add(genreDTO);
+            }
+            return book;
         }
 
     }
