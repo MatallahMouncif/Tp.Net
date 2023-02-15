@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using WPF.Reader.Model;
 
 namespace WPF.Reader.ViewModel
 {
