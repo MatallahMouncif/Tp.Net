@@ -4,13 +4,37 @@
 @{
     ViewData["Title"] = "Liste Genre";
 }
+<style>
+ .genre-list-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
 
-<div class="listeGenres">
-    <h1>Liste des Genres:</h1>
-    <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
-    @foreach (var genre in Model)
-    {
-    }
+.genre-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.genre-item {
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+  font-size: 16px;
+}
+
+</style>
+
+<div class="genre-list-container">
+    <h1>Liste des Genres</h1>
+    <ul class="genre-list">
+        @foreach (var genre in Model)
+        {
+            <li class="genre-item">@genre.Name</li>
+        }
+    </ul>
 </div>
 
 
