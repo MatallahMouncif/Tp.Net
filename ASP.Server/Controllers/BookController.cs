@@ -6,16 +6,24 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Diagnostics;
 
 namespace ASP.Server.Controllers
 {
     public class CreateBookModel
     {
         [Required]
-        [Display(Name = "Nom")]
-        public String Name { get; set; }
+        [Display(Name = "Titre")]
+        public string Title { get; set; }
 
         // Ajouter ici tous les champ que l'utilisateur devra remplir pour ajouter un livre
+        [Required]
+        [Display(Name = "Auteur")]
+        public string Author { get; set; }
+        [Required]
+        [Display(Name = "Prix")]
+        public decimal Price { get; set; }
+        
 
         // Liste des genres séléctionné par l'utilisateur
         public List<int> Genres { get; set; }
@@ -40,20 +48,33 @@ namespace ASP.Server.Controllers
             return View(ListBooks);
         }
 
-        public ActionResult<CreateBookModel> Create(CreateBookModel book)
+        public ActionResult<CreateBookModel> Create(CreateBookModel model)
         {
             // Le IsValid est True uniquement si tous les champs de CreateBookModel marqués Required sont remplis
             if (ModelState.IsValid)
             {
-                // Il faut intéroger la base pour récupérer l'ensemble des objets genre qui correspond aux id dans CreateBookModel.Genres
-                List<Genre> genres = null;
-                // Completer la création du livre avec toute les information nécéssaire que vous aurez ajoutez, et metter la liste des gener récupéré de la base aussi
-                libraryDbContext.Add(new Book() {  });
+                // Map the view model to a Book entity
+                var book = new Book
+                {
+                    Title = model.Title,
+                    Author = model.Author,
+                    Price = model.Price,
+                    Genres = model.Genres.Select(id => libraryDbContext.Genre.Find(id)).ToList()
+                };
+
+              
+                libraryDbContext.Add(book);
                 libraryDbContext.SaveChanges();
+
+                
+
             }
 
+
+
             // Il faut interoger la base pour récupérer tous les genres, pour que l'utilisateur puisse les slécétionné
-            return View(new CreateBookModel() { AllGenres = null } );
+            return View(new CreateBookModel() { AllGenres = libraryDbContext.Genre.ToList() } );
         }
     }
 }
+
