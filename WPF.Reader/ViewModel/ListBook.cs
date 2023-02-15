@@ -13,7 +13,6 @@ namespace WPF.Reader.ViewModel
 
         public ICommand ItemSelectedCommand { get; set; }
 
-        // n'oublier pas faire de faire le binding dans ListBook.xaml !!!!
         public ObservableCollection<Book> Books => Ioc.Default.GetRequiredService<LibraryService>().Books;
 
         public ListBook()
