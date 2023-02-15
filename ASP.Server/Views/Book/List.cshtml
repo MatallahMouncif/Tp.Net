@@ -1,14 +1,47 @@
 ﻿@using ASP.Server.Model
 @model IEnumerable<Book>
 @{
-    ViewData["Title"] = "Home Page";
-}
+	ViewData["Title"] = "Home Page";
 
+}
+<style>
+	body {
+		font-family: Arial, sans-serif;
+	}
+
+	.listeBooks {
+		width: 95%;
+		margin: 0 auto;
+	}
+
+	.book {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-direction: row;
+		margin-bottom: 10px;
+		padding: 10px;
+		background-color: #f1f1f1;
+		border: 1px solid #ddd;
+	}
+	.book h2 {
+		margin: 0;
+		font-size: 24px;
+	}
+	.book p {
+		margin: 0;
+		font-size: 18px;
+	}
+</style>
 <div class="listeBooks">
-    <h1>Liste des livres:</h1>
-    <!-- la liste des genres est dans la variable Model qui est typé en ligne 3, elle correspond à la variable xxx dans View(xxx) du controller -->
-    @foreach (var book in Model)
-    {
-    }
+	@foreach (var book in Model)
+	{
+		<div class="book">
+			<h2>@book.Title</h2>
+			<p>Auteur: @book.Author</p>
+			<p>Prix: @book.Price.ToString("0.00") €</p>
+			<p>Genres: @string.Join(", ", book.Genres.Select(g => g.Name))</p>
+		</div>
+	}
 </div>
 
