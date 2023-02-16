@@ -12,17 +12,26 @@
     <Page.Resources>
         <vm:Navigator x:Key="navigator" />
     </Page.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="80" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="80" />
-        </Grid.RowDefinitions>
-        <!-- On aimerais bien avoir le tire du livre en entête -->
-
-        <!-- Ainsi que le contenu du livre ! -->
-        
-        <Button Grid.Row="2" Command="{Binding Path=GoBack, Source={StaticResource ResourceKey=navigator}}" CommandParameter="LIST" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="200" Content="Retourner au details" Margin="0,0,0,27"/>
-    </Grid>
+    <ScrollViewer>
+        <Grid Background="#F9F4EF">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Background="White" BorderBrush="#D8D8D8" BorderThickness="0 0 0 1">
+                <TextBlock Margin="10" FontSize="40" FontFamily="Georgia" FontWeight="SemiBold">
+                    <Run Text="{Binding CurrentBook.Title}" />
+                    <Run Text="{Binding CurrentBook.Author, StringFormat=' By {0}'}" FontSize="20" />
+                </TextBlock>
+            </Border>
+            <Border Grid.Row="1" Background="White" BorderBrush="#D8D8D8" BorderThickness="0 0 0 1" Margin="10">
+                <TextBlock Text="{Binding CurrentBook.Content}" Grid.Row="1" FontSize="17" FontFamily="Georgia" TextWrapping="WrapWithOverflow" Margin="0,0,0,20">
+                    <TextBlock.Effect>
+                        <DropShadowEffect ShadowDepth="2" Direction="315" Color="#D8D8D8" Opacity="0.5" BlurRadius="3" />
+                    </TextBlock.Effect>
+                </TextBlock>
+            </Border>
+            
+        </Grid>
+    </ScrollViewer>
 </Page>
-
