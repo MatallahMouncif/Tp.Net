@@ -62,12 +62,9 @@ namespace ASP.Server.Controllers
                     Price = model.Price,
                     Genres = model.Genres.Select(id => libraryDbContext.Genre.Find(id)).ToList()
                 };
-
               
                 libraryDbContext.Add(book);
                 libraryDbContext.SaveChanges();
-
-                
 
             }
 
@@ -75,6 +72,14 @@ namespace ASP.Server.Controllers
 
             // Il faut interoger la base pour récupérer tous les genres, pour que l'utilisateur puisse les slécétionné
             return View(new CreateBookModel() { AllGenres = libraryDbContext.Genre.ToList() } );
+        }
+        // I need to add a delete function
+        public ActionResult Delete(int id)
+        {
+            var book = libraryDbContext.Books.Find(id);
+            libraryDbContext.Books.Remove(book);
+            libraryDbContext.SaveChanges();
+            return RedirectToAction("List");
         }
     }
 }
