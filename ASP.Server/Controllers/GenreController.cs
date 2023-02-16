@@ -50,13 +50,15 @@ namespace ASP.Server.Controllers
 
                 libraryDbContext.Genre.Add(genre);
                 libraryDbContext.SaveChanges();
+                ModelState.Clear();
 
             }
 
             var allBooks = libraryDbContext.Books.ToList();
             var createGenreModel = new CreateGenreModel { AllBooks = allBooks };
 
-            return View(new CreateGenreModel() { AllBooks = libraryDbContext.Books.ToList() });
+            return View(createGenreModel);
+
 
 
 

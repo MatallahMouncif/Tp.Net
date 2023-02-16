@@ -65,6 +65,7 @@ namespace ASP.Server.Controllers
               
                 libraryDbContext.Add(book);
                 libraryDbContext.SaveChanges();
+                ModelState.Clear();
 
             }
 
