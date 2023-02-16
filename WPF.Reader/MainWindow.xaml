@@ -12,7 +12,7 @@
         <model:Navigator x:Key="navigator" />
     </Window.Resources>
     <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="top" HorizontalAlignment="center" >
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Right" >
             <Button Command="{Binding Path=GoToHome}" Width="50" Content="Accueil"/>
         </StackPanel>
         <Label DockPanel.Dock="Top" Content="Library system" VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="30px"/>
