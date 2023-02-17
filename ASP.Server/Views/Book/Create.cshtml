@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Add a book";
 }
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 <style>
     .form-container {
@@ -58,26 +60,26 @@
 
 <div class="form-container">
     <h1>Add a book</h1>
-    <form asp-controller="Book" asp-action="Create">
+    <form asp-controller="Book" asp-action="Create" id="add-book-form">
         @Html.AntiForgeryToken()
         <div class="input-group">
             <label asp-for="Title"></label>
-            <input asp-for="Title" />
+            <input asp-for="Title" required />
         </div>
         <div class="input-group">
             <label asp-for="Author"></label>
-            <input asp-for="Author" />
+            <input asp-for="Author" required/>
         </div>
         <div class="input-group">
             <label asp-for="Price"></label>
-            <input asp-for="Price" />
+            <input asp-for="Price"  required/>
         </div>
         <div class="input-group">
-            <label asp-for="Genres">Genres</label>
+            <label asp-for="Genres" >Genres</label>
             @foreach (var genre in Model.AllGenres)
             {
                 <div>
-                    <input type="checkbox" name="Genres" value="@genre.Id" id="@genre.Id" />
+                    <input class="checkBtn" type="checkbox" name="Genres" value="@genre.Id" id="@genre.Id" />
                     <label for="@genre.Id">@genre.Name</label>
                 </div>
             }
@@ -85,3 +87,24 @@
         <input type="submit" value="Add" />
     </form>
 </div>
+<script>
+    // Wait for the DOM to be ready
+    $(document).ready(function() {
+        // Target the form
+        var form = $('#add-book-form');
+
+        // When the form is submitted
+        form.on('submit', function(event) {
+            // Get all the checkboxes that are checked
+            var checked = form.find('input.checkBtn:checked');
+
+            // If no checkboxes are checked
+            if (checked.length === 0) {
+                // Prevent the form from submitting
+                event.preventDefault();
+                // Show an error message
+                alert('Please select at least one genre.');
+            }
+        });
+    });
+</script>
