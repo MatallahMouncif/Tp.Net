@@ -18,19 +18,14 @@ namespace WPF.Reader.ViewModel
         public ICommand ItemSelectedCommand { get; set; }
 
         private GenreDTO _selectedGenre;
+        public int SelectedPage { get; set; }
         public GenreDTO SelectedGenre
         {
             get { return _selectedGenre; }
             set {
                 _selectedGenre = value;
 
-                var api = new BookApi();
-                var genresId = new List<int>();
-                genresId.Add(SelectedGenre.Id);
-
-                var genreRequest = SelectedGenre.Id == 0 ? null : genresId;
-
-                var Listd = api.BookGetBooksAsync(idGenres: genreRequest);
+                Ioc.Default.GetRequiredService<LibraryService>().RefreshBooks(genreId: SelectedGenre.Id);
             }
         }
 
@@ -40,14 +35,8 @@ namespace WPF.Reader.ViewModel
 
         public ListBook()
         {
+            this.SelectedPage= 0;
             ItemSelectedCommand = new RelayCommand(book => { /* the livre devrais etre dans la variable book */ });
-        }
-
-        public void cmbs_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            GenreDTO genreDTOgen = (GenreDTO)sender;
-            GenreDTO genreDTOgen2 = (GenreDTO)sender;
-
         }
     }
 }

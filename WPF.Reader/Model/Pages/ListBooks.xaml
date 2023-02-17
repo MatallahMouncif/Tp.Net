@@ -179,11 +179,11 @@
     </Page.Resources>
     <StackPanel>
         <TextBlock Text="Liste des livres" Style="{StaticResource Title}"/>
-        <ComboBox Style="{DynamicResource ComboBoxStyle1}" Name="cmbColors" ItemsSource="{Binding Books, Mode=OneWay}">
+        <ComboBox Style="{DynamicResource ComboBoxStyle1}" SelectedValue="{Binding SelectedGenre}" Name="cmbColors" ItemsSource="{Binding Genres, Mode=OneWay}">
 
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Id}" Style="{StaticResource p10}"/>
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource p10}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
@@ -197,8 +197,8 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Style="{StaticResource BookCard}">
-                        <TextBlock Style="{StaticResource BookTitle}" Text="Titre du livre"/>
-                        <TextBlock Text="Auteur"/>
+                        <TextBlock Style="{StaticResource BookTitle}" Text="{Binding Title}"/>
+                        <TextBlock Text="{Binding Author}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
