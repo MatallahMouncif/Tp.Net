@@ -56,6 +56,10 @@ namespace WPF.Reader.ViewModel
             CurrentBook = _book;
 
         }
+        public DetailsBook()
+        {
+            CurrentBook = new Book() { Id = 2, Author = "Rémi" };
+        }
     }
 
     /* Cette classe sert juste a afficher des donnée de test dans le designer */
