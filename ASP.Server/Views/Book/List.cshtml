@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Home Page";
     List<Genre> AllGenres = ViewData["AllGenres"] as List<Genre>;
+    List<Author> AllBooks = ViewData["AllAuthors"] as List<Author>;
 }
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -26,15 +27,18 @@
         background-color: #f1f1f1;
         border: 1px solid #ddd;
     }
-    .book h2 {
-        margin: 0;
-        font-size: 24px;
-    }
-    .book p {
-        margin: 0;
-        font-size: 18px;
-    }
-    .delete-button, .edit-button, .save-button, .cancel-button {
+
+        .book h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .book p {
+            margin: 0;
+            font-size: 18px;
+        }
+
+    .delete-button, .cancel-button {
         background-color: red;
         color: white;
         border: none;
@@ -42,6 +46,17 @@
         border-radius: 5px;
         cursor: pointer;
     }
+
+    .edit-button, .save-button {
+        background-color: sandybrown;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+
     .edit-section {
         display: none;
         margin-top: 10px;
@@ -49,6 +64,7 @@
         background-color: #f1f1f1;
         border: 1px solid #ddd;
     }
+
     .genre-checkbox {
         margin-right: 10px;
     }
@@ -59,7 +75,7 @@
         <div class="book">
             <button class="edit-button">Editer</button>
             <h2>@book.Title</h2>
-            <p>Auteur: @book.Author</p>
+            <p>Auteur: @book.Author.Name</p>
             <p>Prix: @book.Price.ToString("0.00") €</p>
             <p>Genres: @string.Join(", ", book.Genres.Select(g => g.Name))</p>
             <form method="post" action="@Url.Action("Delete", "Book", new { id = book.Id })">
@@ -74,11 +90,11 @@
                     </div>
                     <div>
                         <label for="author-input">Auteur:</label>
-                        <input type="text" id="author-input" name="author" value="@book.Author" />
+                        <input type="text" id="author-input" name="author" value="@book.Author.Name" />
                     </div>
                     <div>
                         <label for="price-input">Prix:</label>
-                        <input step ="any" type="number" id="price-input" name="price" value="@book.Price"/>
+                        <input step="any" type="number" id="price-input" name="price" value="@book.Price" />
                     </div>
                     <div>
                         <label>Genres:</label>
@@ -92,36 +108,36 @@
                     </div>
                     <button type="submit" class="save-button">Enregistrer</button>
                     <button type="button" class="cancel-button">Annuler</button>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
     }
 </div>
-        <script>
-            $(document).ready(function() {
-                $('.edit-button').click(function() {
-                    var book = $(this).closest('.book');
-                    var editSection = book.find('.edit-section');
-                    var title = book.find('h2').text();
-                    var author = book.find('p:eq(0)').text().split(':')[1].trim();
-                    var price = parseFloat(book.find('p:eq(1)').text().split(':')[1].trim().replace('€', ''));
-                    var genreIds = book.find('p:eq(2)').text().split(':')[1].trim().split(',').map(function(s) { return s.trim(); });
-                    editSection.find('#title-input').val(title);
-                    editSection.find('#author-input').val(author);
-                    editSection.find('#price-input').val(price);
-                    editSection.find('.genre-checkbox').prop('checked', false);
-                    editSection.find('.genre-checkbox').each(function() {
-                        var checkbox = $(this);
-                        var genreName = checkbox.parent().text().trim();
-                        if (genreIds.includes(genreName)) {
-                            checkbox.prop('checked', true);
-                        }
-                    });
-                    book.find('.edit-section').show();
-                });
-                $('.cancel-button').click(function() {
-                    var book = $(this).closest('.book');
-                    book.find('.edit-section').hide();
-                });
+<script>
+    $(document).ready(function () {
+        $('.edit-button').click(function () {
+            var book = $(this).closest('.book');
+            var editSection = book.find('.edit-section');
+            var title = book.find('h2').text();
+            var author = book.find('p:eq(0)').text().split(':')[1].trim();
+            var price = parseFloat(book.find('p:eq(1)').text().split(':')[1].trim().replace('€', ''));
+            var genreIds = book.find('p:eq(2)').text().split(':')[1].trim().split(',').map(function (s) { return s.trim(); });
+            editSection.find('#title-input').val(title);
+            editSection.find('#author-input').val(author);
+            editSection.find('#price-input').val(price);
+            editSection.find('.genre-checkbox').prop('checked', false);
+            editSection.find('.genre-checkbox').each(function () {
+                var checkbox = $(this);
+                var genreName = checkbox.parent().text().trim();
+                if (genreIds.includes(genreName)) {
+                    checkbox.prop('checked', true);
+                }
             });
-      </script>
+            book.find('.edit-section').show();
+        });
+        $('.cancel-button').click(function () {
+            var book = $(this).closest('.book');
+            book.find('.edit-section').hide();
+        });
+    });
+</script>

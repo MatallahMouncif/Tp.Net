@@ -78,7 +78,7 @@ namespace ASP.Server.Api
                 BookDTO bookDTO = new BookDTO();
                 bookDTO.Id = book.Id;
                 bookDTO.Title = book.Title;
-                bookDTO.Author = book.Author;
+                bookDTO.Author = book.Author.Name;
                 bookDTO.Price = book.Price;
                 bookDTO.Genres = new List<GenreDTO>();
                 foreach (Genre genre in book.Genres)
@@ -104,7 +104,7 @@ namespace ASP.Server.Api
             BookDTO bookDTO = new BookDTO();
             bookDTO.Id = book.Id;
             bookDTO.Title = book.Title;
-            bookDTO.Author = book.Author;
+            bookDTO.Author = book.Author.Name;
             bookDTO.Price = book.Price;
             bookDTO.Genres = new List<GenreDTO>();
             foreach (Genre genre in book.Genres)
