@@ -21,11 +21,13 @@ namespace ASP.Server.Controllers
         [Display(Name = "Auteur")]
         public string Author { get; set; }
         [Required]
+        [DisplayFormat(DataFormatString = "{0:N2}")]
         [Display(Name = "Prix")]
         public float Price { get; set; }
-        
+
 
         // Liste des genres séléctionné par l'utilisateur
+        [Display(Name = "Genres")]
         public List<int> Genres { get; set; }
 
         // Liste des genres a afficher à l'utilisateur
@@ -45,8 +47,9 @@ namespace ASP.Server.Controllers
         {
             // récupérer les livres dans la base de donées pour qu'elle puisse être affiché
             List<Book> ListBooks = libraryDbContext.Books.Include(b => b.Genres).ToList();
-
-			return View(ListBooks);
+            List<Genre> AllGenres = libraryDbContext.Genre.ToList();
+            ViewData["AllGenres"] = AllGenres;
+            return View(ListBooks);
         }
 
         public ActionResult<CreateBookModel> Create(CreateBookModel model)
@@ -80,6 +83,35 @@ namespace ASP.Server.Controllers
             var book = libraryDbContext.Books.Find(id);
             libraryDbContext.Books.Remove(book);
             libraryDbContext.SaveChanges();
+            return RedirectToAction("List");
+        }
+        public ActionResult Edit(int id, string title, string author, float price, List<int> genres)
+        {
+            var book = libraryDbContext.Books.Include(b => b.Genres).SingleOrDefault(b => b.Id == id);
+
+            if (book != null)
+            {
+                // Update the book properties
+                book.Title = title;
+                book.Author = author;
+                book.Price = price;
+
+                // Update the book's genres
+                Console.WriteLine(book.Title);
+                Console.WriteLine(book.Author);
+                Console.WriteLine(book.Price);
+                Console.WriteLine(book.Genres.Count);
+                for (int i = 0;i < genres.Count; i++)
+                {
+                    Console.WriteLine("genre : " + genres[i]);
+                }
+                book.Genres.Clear();
+                book.Genres.AddRange(genres.Select(genreId => libraryDbContext.Genre.Find(genreId)));
+
+                // Save the changes to the database
+                libraryDbContext.SaveChanges();
+            }
+
             return RedirectToAction("List");
         }
     }
