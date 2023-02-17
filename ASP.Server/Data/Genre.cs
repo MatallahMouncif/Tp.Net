@@ -7,19 +7,16 @@ using Newtonsoft.Json;
 
 namespace ASP.Server.Model
 {
-    public class Genre
-    {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public class Genre
+        {
+            [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
-        [Key]
-        public int Id { get; set; }
-        public string Name { get; set; }
-        [JsonIgnore]
-        public List<Book> Books { get;set; }
-        // Mettez ici les propriété de votre livre: Nom et Livres associés
-
-        // N'oublier pas qu'un genre peut avoir plusieur livres
-    }
+            [Key]
+            public int Id { get; set; }
+            public string Name { get; set; }
+            [JsonIgnore]
+            public List<Book> Books { get;set; }
+        }
 
 }
 

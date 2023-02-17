@@ -19,7 +19,7 @@ namespace ASP.Server.Controllers
         // Ajouter ici tous les champ que l'utilisateur devra remplir pour ajouter un livre
         [Required]
         [Display(Name = "Auteur")]
-        public string Author { get; set; }
+        public int Author { get; set; }
         [Required]
         [DisplayFormat(DataFormatString = "{0:N2}")]
         [Display(Name = "Prix")]
@@ -32,6 +32,7 @@ namespace ASP.Server.Controllers
 
         // Liste des genres a afficher à l'utilisateur
         public IEnumerable<Genre> AllGenres { get; init;  }
+        public IEnumerable<Author> AllAuthors { get; init; }
     }
 
     public class BookController : Controller
@@ -46,9 +47,11 @@ namespace ASP.Server.Controllers
         public ActionResult<IEnumerable<Book>> List()
         {
             // récupérer les livres dans la base de donées pour qu'elle puisse être affiché
-            List<Book> ListBooks = libraryDbContext.Books.Include(b => b.Genres).ToList();
+            List<Book> ListBooks = libraryDbContext.Books.Include(b => b.Genres).Include(a => a.Author).ToList();
             List<Genre> AllGenres = libraryDbContext.Genre.ToList();
+            List<Author> AllAuthors = libraryDbContext.Author.ToList();
             ViewData["AllGenres"] = AllGenres;
+            ViewData["AllAuthors"] = AllAuthors;
             return View(ListBooks);
         }
 
@@ -61,7 +64,7 @@ namespace ASP.Server.Controllers
                 var book = new Book
                 {
                     Title = model.Title,
-                    Author = model.Author,
+                    Author = libraryDbContext.Author.Find(model.Author),
                     Price = model.Price,
                     Genres = model.Genres.Select(id => libraryDbContext.Genre.Find(id)).ToList()
                 };
@@ -93,14 +96,16 @@ namespace ASP.Server.Controllers
             {
                 // Update the book properties
                 book.Title = title;
-                book.Author = author;
+                Author auth = libraryDbContext.Author.Where(n => n.Name == author).SingleOrDefault();
+                if (auth == null)
+                {      
+                    book.Author = new Author { Name = author };
+                }
+                else
+                    book.Author = auth;
+
                 book.Price = price;
 
-                // Update the book's genres
-                Console.WriteLine(book.Title);
-                Console.WriteLine(book.Author);
-                Console.WriteLine(book.Price);
-                Console.WriteLine(book.Genres.Count);
                 for (int i = 0;i < genres.Count; i++)
                 {
                     Console.WriteLine("genre : " + genres[i]);

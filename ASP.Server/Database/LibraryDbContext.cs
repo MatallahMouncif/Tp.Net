@@ -15,6 +15,8 @@ namespace ASP.Server.Database
 
         public DbSet<Book> Books { get; set; }
         public DbSet<Genre> Genre { get; internal set; }
+
+        public DbSet<Author> Author { get; internal set; }
       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,8 +25,13 @@ namespace ASP.Server.Database
             .WithMany(g => g.Books)
             .UsingEntity(j => j.ToTable("BookGenre"));
 
-            // Configure the navigation properties for the Book and Genre models
-            modelBuilder.Entity<Book>()
+			modelBuilder.Entity<Book>()
+		.HasOne(b => b.Author)
+		.WithMany(a => a.Books)
+		.HasForeignKey(b => b.AuthorId);
+
+			// Configure the navigation properties for the Book and Genre models
+			modelBuilder.Entity<Book>()
                 .HasIndex(b => b.Title); // example index for Book Name
 
             modelBuilder.Entity<Genre>()
@@ -32,6 +39,8 @@ namespace ASP.Server.Database
 
             modelBuilder.Entity<Book>().ToTable("Book");
             modelBuilder.Entity<Genre>().ToTable("Genre");
-        }
-    }
+			modelBuilder.Entity<Author>().ToTable("Author");
+
+		}
+	}
 }
