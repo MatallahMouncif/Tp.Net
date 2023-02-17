@@ -19,7 +19,7 @@ namespace ASP.Server.Controllers
         // Ajouter ici tous les champ que l'utilisateur devra remplir pour ajouter un livre
         [Required]
         [Display(Name = "Auteur")]
-        public int Author { get; set; }
+        public string Author { get; set; }
         [Required]
         [DisplayFormat(DataFormatString = "{0:N2}")]
         [Display(Name = "Prix")]
@@ -61,10 +61,22 @@ namespace ASP.Server.Controllers
             if (ModelState.IsValid)
             {
                 // Map the view model to a Book entity
+                Author auth = libraryDbContext.Author.Where(a => a.Name == model.Author).SingleOrDefault() ;
+
+                if (auth == null)
+                {
+
+                    auth = new Author
+                    {
+                        Name = model.Author
+                    };
+                    libraryDbContext.Add(auth);
+                    libraryDbContext.SaveChanges();
+                }
                 var book = new Book
                 {
                     Title = model.Title,
-                    Author = libraryDbContext.Author.Find(model.Author),
+                    Author = auth,
                     Price = model.Price,
                     Genres = model.Genres.Select(id => libraryDbContext.Genre.Find(id)).ToList()
                 };
