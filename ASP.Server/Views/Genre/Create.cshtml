@@ -3,9 +3,51 @@
 @{
     ViewData["Title"] = "Add a Genre";
 }
+
 <style>
+    body {
+        background-color: #F9F9F9;
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        font-size: 36px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    form {
+        margin: 0 auto;
+        width: 80%;
+        max-width: 500px;
+        padding: 30px;
+        border: 1px solid #DDD;
+        border-radius: 5px;
+        background-color: #FFF;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="submit"] {
+        background-color: #2196F3;
+        border: none;
+        color: #FFF;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0D47A1;
+    }
+
     .input-group {
-        margin-top: 10px;
+        margin-top: 20px;
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
@@ -13,19 +55,35 @@
 
     input, textarea, select {
         flex-basis: 85%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid #DDD;
+        transition: border-color 0.3s ease;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: #2196F3;
     }
 
     label {
         flex-basis: 10%;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: right;
+        padding-right: 10px;
+        line-height: 35px;
     }
 </style>
 
-<!-- Voici une facon de faire, mais ce n'est pas la seul, a vous de jouer ! -->
+<h1>@ViewData["Title"]</h1>
+
 <form asp-controller="Genre" asp-action="Create">
     @Html.AntiForgeryToken()
      <div class="input-group">
-        <label asp-for="Name"></label>
+        <label asp-for="Name">Name:</label>
         <input asp-for="Name" />
     </div>
-    <input type="submit" value="Add" style="width: 100%; margin-top: 50px" />
+    <input type="submit" value="Add Genre" />
 </form>

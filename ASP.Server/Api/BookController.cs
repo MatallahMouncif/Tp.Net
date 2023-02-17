@@ -65,21 +65,23 @@ namespace ASP.Server.Api
             if (idGenres == null || idGenres.Length == 0)
             {
                 totalBooks = libraryDbContext.Books.Count();
-                books = libraryDbContext.Books.Include(x => x.Genres).Skip(offset).Take(limit).ToList();
+                books = libraryDbContext.Books.Include(x => x.Genres).Include(a => a.Author).Skip(offset).Take(limit).ToList();
             }
             else
             {
-                totalBooks = libraryDbContext.Books.Include(x => x.Genres).Where(x => x.Genres.Any(y => idGenres.Contains(y.Id))).Count();
-                books = libraryDbContext.Books.Include(x => x.Genres).Where(x => x.Genres.Any(y => idGenres.Contains(y.Id))).Skip(offset).Take(limit).ToList();
+                totalBooks = libraryDbContext.Books.Include(x => x.Genres).Include(a => a.Author).Where(x => x.Genres.Any(y => idGenres.Contains(y.Id))).Count();
+                books = libraryDbContext.Books.Include(x => x.Genres).Include(a => a.Author).Where(x => x.Genres.Any(y => idGenres.Contains(y.Id))).Skip(offset).Take(limit).ToList();
             }
             List<BookDTO> booksDTO = new List<BookDTO>();
             foreach (Book book in books)
             {
+                Console.WriteLine(book.Author);
+                Console.WriteLine(book.Author.Name);
                 BookDTO bookDTO = new BookDTO();
                 bookDTO.Id = book.Id;
                 bookDTO.Title = book.Title;
                 bookDTO.Author = book.Author.Name;
-                bookDTO.Price = book.Price;
+                bookDTO.Price = (float)Math.Round(book.Price, 2);
                 bookDTO.Genres = new List<GenreDTO>();
                 foreach (Genre genre in book.Genres)
                 {
