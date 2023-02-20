@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Reflection.Metadata;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WPF.Reader.Api;
@@ -25,8 +27,10 @@ namespace WPF.Reader.ViewModel
             get { return _selectedGenre; }
             set {
                 _selectedGenre = value;
-
-                Ioc.Default.GetRequiredService<LibraryService>().RefreshBooks(genreId: SelectedGenre.Id);
+                Task.Run(() =>
+                {
+                    Ioc.Default.GetRequiredService<LibraryService>().RefreshBooks(genreId: SelectedGenre.Id);
+                });
             }
         }
 

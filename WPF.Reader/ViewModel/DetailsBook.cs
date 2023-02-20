@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using WPF.Reader.Api;
 using WPF.Reader.Model;
@@ -48,7 +49,10 @@ namespace WPF.Reader.ViewModel
             var bookApi = new BookApi();
             
             this.CurrentBook = book;
-            this.BookFullInfo = bookApi.BookGetBook(book.Id);
+            Task.Run(() =>
+            {
+                this.BookFullInfo = bookApi.BookGetBook(book.Id);
+            });
         }
 
         public DetailsBook() {
