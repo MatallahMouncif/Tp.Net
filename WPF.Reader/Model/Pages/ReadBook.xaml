@@ -21,7 +21,7 @@
             <Border Grid.Row="0" Background="White" BorderBrush="#D8D8D8" BorderThickness="0 0 0 1">
                 <TextBlock Margin="10" FontSize="40" FontFamily="Georgia" FontWeight="SemiBold">
                     <Run Text="{Binding CurrentBook.Title}" />
-                    <Run Text="{Binding CurrentBook.Author, StringFormat=' By {0}'}" FontSize="20" />
+                    <Run Text="{Binding CurrentBook.Author.Name, StringFormat=' By {0}'}" FontSize="20" />
                 </TextBlock>
             </Border>
             <Border Grid.Row="1" Background="White" BorderBrush="#D8D8D8" BorderThickness="0 0 0 1" Margin="10">
