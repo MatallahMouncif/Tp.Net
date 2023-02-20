@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -21,6 +22,9 @@ namespace WPF.Reader.ViewModel
 
         private GenreDTO _selectedGenre;
         private BookDTO _selectedBook;
+
+        public String LoadingState { get; set; }
+
         public int SelectedPage { get; set; }
         public GenreDTO SelectedGenre
         {
@@ -50,8 +54,21 @@ namespace WPF.Reader.ViewModel
 
         public ObservableCollection<GenreDTO> Genres => Ioc.Default.GetRequiredService<LibraryService>().Genres;
 
+
+        IDisposable subscriptionLoading;
+
         public ListBook()
         {
+            subscriptionLoading = Ioc.Default.GetRequiredService<LibraryService>().IsLoading.Subscribe(x => 
+            { 
+                if (x)
+                {
+                    this.LoadingState = "Chargement...";
+                } else
+                {
+                    this.LoadingState = "";
+                }
+            });
             this.SelectedPage= 0;
             this.SelectedGenre = new GenreDTO();
             ItemSelectedCommand = new RelayCommand(book => { /* the livre devrais etre dans la variable book */ });

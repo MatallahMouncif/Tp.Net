@@ -179,6 +179,7 @@
     </Page.Resources>
     <StackPanel>
         <TextBlock Text="Liste des livres" Style="{StaticResource Title}"/>
+        <TextBlock Text="{Binding LoadingState}"/>
         <ComboBox Style="{DynamicResource ComboBoxStyle1}" SelectedValue="{Binding SelectedGenre}" Name="cmbColors" ItemsSource="{Binding Genres, Mode=OneWay}">
 
             <ComboBox.ItemTemplate>
