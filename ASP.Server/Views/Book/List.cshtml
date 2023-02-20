@@ -110,11 +110,11 @@
 </style>
 <div class="filter-section">
     <div>
-        <label for="filter-author">Filtrer par auteur:</label>
+        <label for="filter-author">Filter by authors:</label>
         <input type="text" id="filter-author" />
     </div>
     <div>
-        <label>Filtrer par genre:</label>
+        <label>Filter by genres:</label>
         @foreach (var genre in AllGenres)
         {
             <label class="genre-filter-label"><input type="checkbox" class="genre-filter-checkbox" name="genres" value="@genre.Name" /> @genre.Name</label>
@@ -125,27 +125,27 @@
     @foreach (var book in Model)
     {
         <div class="book">
-            <button class="edit-button">Editer</button>
+            <button class="edit-button">Edit</button>
             <h2>@book.Title</h2>
-            <p>Auteur: @book.Author.Name</p>
-            <p>Prix: @book.Price.ToString("0.00") €</p>
+            <p>Author: @book.Author.Name</p>
+            <p>Price: @book.Price.ToString("0.00") €</p>
             <p>Genres: @string.Join(", ", book.Genres.Select(g => g.Name))</p>
             <form method="post" action="@Url.Action("Delete", "Book", new { id = book.Id })">
-                <button type="submit" class="delete-button">Supprimer</button>
+                <button type="submit" class="delete-button">Delete</button>
             </form>
             <div class="edit-section">
                 <form method="get" action="@Url.Action("Edit", "Book", new { id = book.Id })">
                     <input type="hidden" name="id" value="@book.Id" />
                     <div>
-                        <label for="title-input">Titre:</label>
+                        <label for="title-input">Title:</label>
                         <input type="text" id="title-input" name="title" value="@book.Title" />
                     </div>
                     <div>
-                        <label for="author-input">Auteur:</label>
+                        <label for="author-input">Author:</label>
                         <input type="text" id="author-input" name="author" value="@book.Author.Name" />
                     </div>
                     <div>
-                        <label for="price-input">Prix:</label>
+                        <label for="price-input">Price:</label>
                         <input step="any" type="number" id="price-input" name="price" value="@book.Price" />
                     </div>
                     <div>
@@ -158,8 +158,8 @@
                             </label>
                         }
                     </div>
-                    <button type="submit" class="save-button">Enregistrer</button>
-                    <button type="button" class="cancel-button">Annuler</button>
+                    <button type="submit" class="save-button">Save</button>
+                    <button type="button" class="cancel-button">Cancel</button>
                 </form>
             </div>
         </div>
