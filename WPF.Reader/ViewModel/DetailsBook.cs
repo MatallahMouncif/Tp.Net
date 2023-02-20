@@ -53,7 +53,7 @@ namespace WPF.Reader.ViewModel
         }
 
         public DetailsBook() {
-            CurrentBook = _book;
+            CurrentBook = _currentBook;
 
         }
        
