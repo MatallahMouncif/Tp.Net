@@ -48,7 +48,7 @@
                 </ItemsControl>
             </WrapPanel>
 
-            <Button Content="Read" Command="{Binding ReadCommand}" HorizontalAlignment="Center" Margin="0,20,0,0" Width="59" />
+            <Button Content="Read" Command="{Binding ReadCommand}" CommandParameter="{Binding BookFullInfo}" HorizontalAlignment="Center" Margin="0,20,0,0" Width="59" />
         </StackPanel>
     </Grid>
 </Page>

@@ -161,6 +161,7 @@
       "type": "object",
       "required": [
         "id",
+        "authorId",
         "price"
       ],
       "properties": {
@@ -171,8 +172,12 @@
         "title": {
           "type": "string"
         },
+        "authorId": {
+          "type": "integer",
+          "format": "int32"
+        },
         "author": {
-          "type": "string"
+          "$ref": "#/definitions/Author"
         },
         "price": {
           "type": "number",
@@ -186,6 +191,21 @@
           "items": {
             "$ref": "#/definitions/Genre"
           }
+        }
+      }
+    },
+    "Author": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
         }
       }
     },

@@ -13,9 +13,8 @@ namespace WPF.Reader.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
 
        
-        public ICommand ReadCommand { get; init; } = new RelayCommand(x => {
-            Book myBook = ((DetailsBook)x).BookFullInfo;
-            Ioc.Default.GetRequiredService<INavigationService>().Navigate<ReadBook>(myBook);
+        public ICommand ReadCommand { get; init; } = new RelayCommand(bookFullInfo => {
+            Ioc.Default.GetRequiredService<INavigationService>().Navigate<ReadBook>(bookFullInfo);
         });
 
         // n'oublier pas faire de faire le binding dans DetailsBook.xaml !!!!
