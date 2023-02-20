@@ -14,7 +14,7 @@ namespace ASP.Server.Controllers
     public class CreateGenreModel
     {
         [Required]
-        [Display(Name = "Nom")]
+        [Display(Name = "Name")]
         public string Name { get; set; }
         public IEnumerable<Book> AllBooks { get; init; }
 

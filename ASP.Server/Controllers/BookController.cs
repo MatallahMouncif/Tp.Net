@@ -13,16 +13,16 @@ namespace ASP.Server.Controllers
     public class CreateBookModel
     {
         [Required]
-        [Display(Name = "Titre")]
+        [Display(Name = "Title")]
         public string Title { get; set; }
 
         // Ajouter ici tous les champ que l'utilisateur devra remplir pour ajouter un livre
         [Required]
-        [Display(Name = "Auteur")]
+        [Display(Name = "Author")]
         public string Author { get; set; }
         [Required]
         [DisplayFormat(DataFormatString = "{0:N2}")]
-        [Display(Name = "Prix")]
+        [Display(Name = "Price")]
         public float Price { get; set; }
 
 
