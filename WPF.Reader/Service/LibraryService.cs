@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,6 +25,10 @@ namespace WPF.Reader.Service
         {
             
         };
+
+        private readonly Subject<bool> _isLoading = new Subject<bool>();
+
+        public IObservable<bool> IsLoading { get { return _isLoading; } }
         
         public ObservableCollection<GenreDTO> Genres { get; set; } = new ObservableCollection<GenreDTO>()
         {
@@ -31,6 +37,7 @@ namespace WPF.Reader.Service
 
         public LibraryService()
         {
+            this._isLoading.OnNext(false);
             Task.Run(() =>
             {
                 this.RefreshGenres();
@@ -40,6 +47,7 @@ namespace WPF.Reader.Service
 
         public async void RefreshBooks (int genreId = 0, int page = 0)
         {
+            this._isLoading.OnNext(true);
             List<int> idGenres = new List<int>();
             idGenres.Add(genreId);
             var genreRequest = genreId == 0 ? null : idGenres;
@@ -52,10 +60,12 @@ namespace WPF.Reader.Service
                 books.ForEach(book => this.Books.Add(book));
                 }
             });
+            this._isLoading.OnNext(false);
         }
 
         public async void RefreshGenres ()
         {
+            this._isLoading.OnNext(true);
             List<GenreDTO> genres = await this.genreApi.GenreGetGenresAsync();
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -66,6 +76,7 @@ namespace WPF.Reader.Service
                     genres.ForEach(gen => this.Genres.Add(gen));
                 }
             });
+            this._isLoading.OnNext(false);
         } 
 
 
