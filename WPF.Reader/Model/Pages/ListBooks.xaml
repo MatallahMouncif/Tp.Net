@@ -187,7 +187,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <ListBox ItemsSource="{Binding Books, Mode=OneWay}" BorderThickness="0">
+        <ListBox ItemsSource="{Binding Books, Mode=OneWay}" SelectedItem="{Binding SelectedBook, Mode=TwoWay}" BorderThickness="0">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="BorderThickness" Value="0 1 0 0" />
