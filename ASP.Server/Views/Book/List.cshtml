@@ -8,6 +8,45 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
+    .filter-section {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        background-color: #f2f2f2;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+        .filter-section > div {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .filter-section label {
+            margin-right: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .filter-section input[type="text"],
+        .filter-section input[type="checkbox"] {
+            margin-right: 5px;
+            padding: 5px;
+            font-size: 14px;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .filter-section input[type="text"] {
+            width: 200px;
+        }
+
+        .filter-section input[type="checkbox"] {
+            transform: scale(1.5);
+        }
+
     body {
         font-family: Arial, sans-serif;
     }
@@ -69,7 +108,19 @@
         margin-right: 10px;
     }
 </style>
-
+<div class="filter-section">
+    <div>
+        <label for="filter-author">Filtrer par auteur:</label>
+        <input type="text" id="filter-author" />
+    </div>
+    <div>
+        <label>Filtrer par genre:</label>
+        @foreach (var genre in AllGenres)
+        {
+            <label class="genre-filter-label"><input type="checkbox" class="genre-filter-checkbox" name="genres" value="@genre.Name" /> @genre.Name</label>
+        }
+    </div>
+</div>
 <div class="listeBooks">
     @foreach (var book in Model)
     {
@@ -141,4 +192,34 @@
             book.find('.edit-section').hide();
         });
     });
+    const filterAuthorInput = document.getElementById("filter-author");
+    const genreFilterCheckboxes = document.querySelectorAll(".genre-filter-checkbox");
+    const books = document.querySelectorAll(".book");
+    function filterBooks() {
+        const authorFilterValue = filterAuthorInput.value.trim().toLowerCase();
+        const genreFilterValues = Array.from(genreFilterCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+
+        for (var i = 0; i < genreFilterValues.length; i++)
+        {
+            genreFilterValues[i] = genreFilterValues[i].trim().toLowerCase();
+        }
+
+        for (const book of books) {
+            var authorValue = book.querySelector("p:nth-of-type(1)").textContent.trim().toLowerCase();
+            authorValue = authorValue.replace("auteur: ", "")
+            const genreValues = book.querySelector("p:nth-of-type(3)").textContent.trim().toLowerCase();
+            
+            const authorMatch = authorFilterValue === "" || authorValue.includes(authorFilterValue);
+            const genreMatch = genreFilterValues.length === 0 || genreFilterValues.every(genreValue => genreValues.includes(genreValue));
+
+            book.style.display = authorMatch && genreMatch ? "" : "none";
+        }
+    }
+
+    filterAuthorInput.addEventListener("input", filterBooks);
+    for (const checkbox of genreFilterCheckboxes) {
+        checkbox.addEventListener("change", filterBooks);
+    }
 </script>
