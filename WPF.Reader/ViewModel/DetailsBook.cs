@@ -50,6 +50,12 @@ namespace WPF.Reader.ViewModel
             this.CurrentBook = book;
             this.BookFullInfo = bookApi.BookGetBook(book.Id);
         }
+
+        public DetailsBook() {
+            CurrentBook = _book;
+
+        }
+       
     }
 
     /* Cette classe sert juste a afficher des donnée de test dans le designer */

@@ -1,0 +1,25 @@
+﻿@using ASP.Server.Model
+@using ASP.Server.Controllers
+@model StatsViewModel
+
+<h1>Statistics</h1>
+
+<p>Total number of books: @Model.BookCount</p>
+
+<p>Number of books per author:</p>
+<ul>
+   @* @foreach (var authorStats in Model.AuthorBookCount)
+    {
+            <li>@authorStats.Key:
+            @authorStats.Value
+            </li>
+    }*@
+</ul>
+
+<p>Word count statistics:</p>
+<ul>
+    <li>Minimum word count: @Model.MinWordCount</li>
+    <li>Maximum word count: @Model.MaxWordCount</li>
+    @*<li>Median word count: @Model.MedianWordCount</li>*@
+    <li>Mean word count: @Model.AverageWordCount</li>
+</ul>
