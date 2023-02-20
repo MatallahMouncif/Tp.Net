@@ -18,6 +18,7 @@ namespace WPF.Reader.ViewModel
         public ICommand ItemSelectedCommand { get; set; }
 
         private GenreDTO _selectedGenre;
+        private BookDTO _selectedBook;
         public int SelectedPage { get; set; }
         public GenreDTO SelectedGenre
         {
@@ -29,6 +30,18 @@ namespace WPF.Reader.ViewModel
             }
         }
 
+        public BookDTO SelectedBook
+        {
+            get { return _selectedBook; }
+            set
+            {
+                _selectedBook = value;
+
+                if (this.SelectedBook != null)
+                    Ioc.Default.GetRequiredService<INavigationService>().Navigate<DetailsBook>(this.SelectedBook);
+            }
+        }
+
         public ObservableCollection<BookDTO> Books => Ioc.Default.GetRequiredService<LibraryService>().Books;
 
         public ObservableCollection<GenreDTO> Genres => Ioc.Default.GetRequiredService<LibraryService>().Genres;
@@ -36,6 +49,7 @@ namespace WPF.Reader.ViewModel
         public ListBook()
         {
             this.SelectedPage= 0;
+            this.SelectedGenre = new GenreDTO();
             ItemSelectedCommand = new RelayCommand(book => { /* the livre devrais etre dans la variable book */ });
         }
     }

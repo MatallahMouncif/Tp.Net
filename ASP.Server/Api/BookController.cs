@@ -102,7 +102,7 @@ namespace ASP.Server.Api
         [Route("book/{id}")]
         public ActionResult<Book> GetBook(int id)
         {
-            Book book = libraryDbContext.Books.Include(x => x.Genres).First(x => x.Id == id);
+            Book book = libraryDbContext.Books.Include(x => x.Genres).Include(a => a.Author).First(x => x.Id == id);
             BookDTO bookDTO = new BookDTO();
             bookDTO.Id = book.Id;
             bookDTO.Title = book.Title;
