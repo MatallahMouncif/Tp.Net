@@ -26,9 +26,10 @@ namespace ASP.Server.Controllers
             List<int> NbrMots = new(); 
             foreach (var books in _context.Books) {
                 if (books.Content != null)
-                {
-                    NbrMots.Add(books.Content.Split(' ').Length);
-                }
+                     NbrMots.Add(books.Content.Split(' ').Length);
+                else
+                     NbrMots.Add(0);
+                
             }
 
             NbrMots.Sort(); 
