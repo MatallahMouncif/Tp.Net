@@ -24,12 +24,15 @@ namespace WPF.Reader.ViewModel
         private BookDTO _selectedBook;
 
         public String LoadingState { get; set; }
+        public int ContentLength { get; set; }
 
         public int SelectedPage { get; set; }
+        public bool isNextActivated { get; set; }
         public GenreDTO SelectedGenre
         {
             get { return _selectedGenre; }
             set {
+                this.SelectedPage = 0;
                 _selectedGenre = value;
                 Task.Run(() =>
                 {
@@ -37,6 +40,12 @@ namespace WPF.Reader.ViewModel
                 });
             }
         }
+
+        public ICommand PreviousCommand { get; init; } 
+        
+        public ICommand NextCommand { get; init; }
+
+
 
         public BookDTO SelectedBook
         {
@@ -56,9 +65,46 @@ namespace WPF.Reader.ViewModel
 
 
         IDisposable subscriptionLoading;
+        
+        IDisposable subscriptionContentLength;
+
+        private void CalculateIsNextActivated()
+        {
+            if (this.ContentLength > ((this.SelectedPage+1) *10))
+            {
+                this.isNextActivated = true;
+            } else
+            {
+                this.isNextActivated = false;
+            }
+        }
 
         public ListBook()
         {
+            this.ContentLength = 0;
+            this.SelectedPage = 0;
+
+            this.PreviousCommand = new RelayCommand(x =>
+            {
+                this.SelectedPage = this.SelectedPage - 1;
+                Task.Run(() =>
+                {
+                    Ioc.Default.GetRequiredService<LibraryService>().RefreshBooks(genreId: this.SelectedGenre.Id, page: this.SelectedPage);
+                });
+            });
+
+            this.NextCommand = new RelayCommand(x =>
+            {
+                this.SelectedPage = this.SelectedPage + 1;
+                Task.Run(() =>
+                {
+                    Ioc.Default.GetRequiredService<LibraryService>().RefreshBooks(genreId: this.SelectedGenre.Id, page: this.SelectedPage);
+                });
+                this.CalculateIsNextActivated();
+
+            });
+
+
             subscriptionLoading = Ioc.Default.GetRequiredService<LibraryService>().IsLoading.Subscribe(x => 
             { 
                 if (x)
@@ -69,7 +115,13 @@ namespace WPF.Reader.ViewModel
                     this.LoadingState = "";
                 }
             });
-            this.SelectedPage= 0;
+
+            subscriptionContentLength = Ioc.Default.GetRequiredService<LibraryService>().ContentLength.Subscribe(x =>
+            {
+                this.ContentLength= x;
+                this.CalculateIsNextActivated();
+            });
+
             this.SelectedGenre = new GenreDTO();
             ItemSelectedCommand = new RelayCommand(book => { /* the livre devrais etre dans la variable book */ });
         }
