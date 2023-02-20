@@ -25,7 +25,10 @@ namespace ASP.Server.Controllers
             Trace.WriteLine(bookCount);
             List<int> NbrMots = new(); 
             foreach (var books in _context.Books) {
-                NbrMots.Add(books.Content.Split(' ').Length);
+                if (books.Content != null)
+                {
+                    NbrMots.Add(books.Content.Split(' ').Length);
+                }
             }
 
             NbrMots.Sort(); 
