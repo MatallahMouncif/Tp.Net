@@ -30,19 +30,31 @@ namespace ASP.Server.Controllers
 
             NbrMots.Sort(); 
 
-            
+            //I want to count number of authors 
+            var authorCount = _context.Books.GroupBy(b => b.Author.Name).Count();
 
-            
-           //var authorBookCount = _context.Books.GroupBy(b => b.Author).ToDictionary(g => g.Key, g => g.Count());
+
+
+            //I want to get a list of authors and the number of books they have written
+            var authorBookCount = _context.Books.Join(_context.Author, b => b.AuthorId, a => a.Id, (b, a) => new { Book = b, AuthorName = a.Name })
+                                                 .ToList()
+                                                 .GroupBy(ba => ba.AuthorName)
+                                                 .ToDictionary(g => g.Key, g => g.Count());
+            Trace.WriteLine(authorBookCount);
+           
+
+
+            //var authorBookCount = _context.Books.GroupBy(b => b.Author).ToDictionary(g => g.Key, g => g.Count());
             // get the contennt and split in by a space or a comma or a dot or back to line or a tabulation
             // then count the number of words
 
-                   
+
 
             var statsViewModel = new StatsViewModel
             {
                 BookCount = bookCount,
-                //AuthorBookCount = authorBookCount,
+                AuthorCount = authorCount,
+                AuthorBookCount = authorBookCount,
                 MaxWordCount = NbrMots.Max(),
                 MinWordCount = NbrMots.Min(),
                 MedianWordCount = GetMedian(NbrMots),
@@ -72,7 +84,9 @@ namespace ASP.Server.Controllers
     public class StatsViewModel
     {
         public int BookCount { get; set; }
-       // public Dictionary<Author, int> AuthorBookCount { get; set; }
+        public int AuthorCount {get; set; }
+
+        public Dictionary<string, int> AuthorBookCount { get; set; }
         public int MaxWordCount { get; set; }
         public int MinWordCount { get; set; }
         public double MedianWordCount { get; set; }

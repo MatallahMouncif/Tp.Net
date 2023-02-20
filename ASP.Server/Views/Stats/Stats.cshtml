@@ -4,23 +4,54 @@
 
 <h1>Statistics</h1>
 
-<p>Total number of books: @Model.BookCount</p>
+<div class="card mb-3">
+    <div class="card-header">
+        Total number of books
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">@Model.BookCount</h5>
+    </div>
+</div>
 
-<p>Number of books per author:</p>
-<ul>
-    @*@foreach (var authorStats in Model.AuthorBookCount)
-    {
-        <li>
-            @authorStats.Key:
-            @authorStats.Value
-        </li>
-    }*@
-</ul>
 
-<p>Word count statistics:</p>
-<ul>
-    <li>Minimum word count: @Model.MinWordCount</li>
-    <li>Maximum word count: @Model.MaxWordCount</li>
-   @* <li>Median word count: @Model.MedianWordCount</li>*@
-    <li>Mean word count: @Model.AverageWordCount</li>
-</ul>
+<div class="card mb-3">
+    <div class="card-header">
+        Word count statistics
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Number of Authors: @Model.AuthorCount</li>
+            <li class="list-group-item">Minimum word count: @Model.MinWordCount</li>
+            <li class="list-group-item">Maximum word count: @Model.MaxWordCount</li>
+            <li class="list-group-item">Median word count: @Model.MedianWordCount</li>
+            <li class="list-group-item">Mean word count: @Model.AverageWordCount</li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="card mb-3">
+    <div class="card-header">
+        Number of books per author
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Author</th>
+                    <th scope="col">Number of books</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var authorStats in Model.AuthorBookCount)
+                {
+                    <tr>
+                        <td>@authorStats.Key</td>
+                        <td>@authorStats.Value</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
