@@ -177,18 +177,26 @@
         </Style>
 
     </Page.Resources>
-    <StackPanel>
-        <TextBlock Text="Liste des livres" Style="{StaticResource Title}"/>
-        <TextBlock Text="{Binding LoadingState}"/>
-        <ComboBox Style="{DynamicResource ComboBoxStyle1}" SelectedValue="{Binding SelectedGenre}" Name="cmbColors" ItemsSource="{Binding Genres, Mode=OneWay}">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top">
+            <TextBlock Text="Liste des livres" Style="{StaticResource Title}"/>
+            <TextBlock Text="{Binding LoadingState}"/>
+            <ComboBox Style="{DynamicResource ComboBoxStyle1}" SelectedValue="{Binding SelectedGenre}" Name="cmbColors" ItemsSource="{Binding Genres, Mode=OneWay}">
 
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource p10}"/>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-        <ListBox ItemsSource="{Binding Books, Mode=OneWay}" SelectedItem="{Binding SelectedBook, Mode=TwoWay}" BorderThickness="0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Style="{StaticResource p10}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
+            <Button Width="150" Command="{Binding PreviousCommand}"  IsEnabled="{Binding SelectedPage}">Précedent</Button>
+            <Button Width="150" Command="{Binding NextCommand}" IsEnabled="{Binding isNextActivated}">Suivant</Button>
+        </StackPanel>
+        
+        <ListBox ItemsSource="{Binding Books, Mode=OneWay}" SelectedItem="{Binding SelectedBook, Mode=TwoWay}" BorderThickness="0" ScrollViewer.VerticalScrollBarVisibility="Visible">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="BorderThickness" Value="0 1 0 0" />
@@ -204,19 +212,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <!-- 
-            A vous de créer la liste avec le bon binding. Une <ListBox> fera l'affaire 
-            La propriété ItemsSource doit pointé vers la propiété Books de votre dataContext actuelle 
-            Utilisé ListBox.ItemTemplate pour définir comment sont affiché vos items
-            <ListBox.ItemTemplate>
-        
-            A vous de faire afficher les champs que vous voulez afficher pour savoir quel sont les livre disponible
-            <TextBlock Text="{Binding MyPropertyOnMyObjectBook}"/>
-            N'oublier pas non plus de rajouter un boutton quelque part pour allez voir les détails de votre livre
-            Les propriété Command et CommandParameter pourrons vous aider ! 
-            Command="{Binding DataContext.ItemSelectedCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Page}}}" 
-            CommandParameter="{Binding .}"
-        -->
-    </StackPanel>
+    </DockPanel>
 </Page>
 

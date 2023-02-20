@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -29,7 +30,11 @@ namespace WPF.Reader.Service
         private readonly Subject<bool> _isLoading = new Subject<bool>();
 
         public IObservable<bool> IsLoading { get { return _isLoading; } }
-        
+
+        private readonly Subject<int> _contentLength = new Subject<int>();
+
+        public IObservable<int> ContentLength { get { return _contentLength; } }
+
         public ObservableCollection<GenreDTO> Genres { get; set; } = new ObservableCollection<GenreDTO>()
         {
 
@@ -51,7 +56,17 @@ namespace WPF.Reader.Service
             List<int> idGenres = new List<int>();
             idGenres.Add(genreId);
             var genreRequest = genreId == 0 ? null : idGenres;
-            List<BookDTO> books = await this.bookApi.BookGetBooksAsync(offset : page,idGenres : genreRequest);
+            var reponse = await this.bookApi.BookGetBooksWithHttpInfoAsync(offset: page * 10, idGenres: genreRequest);
+
+            if (reponse.Headers.Keys.Contains("Pagination"))
+            {
+                var pagination = reponse.Headers["Pagination"][0];
+                this._contentLength.OnNext(int.Parse(pagination.Substring(pagination.IndexOf('/') + 1)));
+            }
+                //this._contentLength.OnNext();
+
+            List<BookDTO> books = reponse.Data;
+            
             Application.Current.Dispatcher.Invoke(() =>
             {
                 if (books != null)
