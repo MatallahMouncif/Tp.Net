@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using CommunityToolkit.Mvvm.DependencyInjection;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
+using WPF.Reader.Api;
 using WPF.Reader.Model;
+using WPF.Reader.Service;
 
 namespace WPF.Reader.ViewModel
 {
@@ -10,22 +13,17 @@ namespace WPF.Reader.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
 
        
-        public ICommand ReadCommand { get; init; } = new RelayCommand(x => { /* A vous de définir la commande */ });
+        public ICommand ReadCommand { get; init; } = new RelayCommand(x => {
+            Book myBook = ((DetailsBook)x).BookFullInfo;
+            Ioc.Default.GetRequiredService<INavigationService>().Navigate<ReadBook>(myBook);
+        });
 
         // n'oublier pas faire de faire le binding dans DetailsBook.xaml !!!!
-        private Book _currentBook;
-        private static Book _book = new Book
-        {
-            Title = "The Lord of the Rings",
-            Author = "J.R.R. Tolkien",
-            Price = 20,
-            Genres = new List<Genre>
-        {
-            new Genre { Name = "Fantasy" },
-            new Genre { Name = "Adventure" }
-        }
-        };
-        public Book CurrentBook
+        private BookDTO _currentBook;
+
+        public Book BookFullInfo { get; set; }
+
+        public BookDTO CurrentBook
         {
             get { return _currentBook; }
             set
@@ -46,10 +44,12 @@ namespace WPF.Reader.ViewModel
             }
         }
 
-        public DetailsBook(Book book)
+        public DetailsBook(BookDTO book)
         {
+            var bookApi = new BookApi();
             
-
+            this.CurrentBook = book;
+            this.BookFullInfo = bookApi.BookGetBook(book.Id);
         }
 
         public DetailsBook() {
@@ -62,6 +62,6 @@ namespace WPF.Reader.ViewModel
     /* Cette classe sert juste a afficher des donnée de test dans le designer */
     public class InDesignDetailsBook : DetailsBook
     {
-        public InDesignDetailsBook() : base(new Book() { Title = "Test Book" }) { }
+        public InDesignDetailsBook() : base(new BookDTO() { Title = "Test Book" }) { }
     }
 }
