@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using WPF.Reader.Api;
 using WPF.Reader.Model;
 
@@ -29,8 +31,11 @@ namespace WPF.Reader.Service
 
         public LibraryService()
         {
-            this.RefreshGenres();
-            this.RefreshBooks();
+            Task.Run(() =>
+            {
+                this.RefreshGenres();
+                this.RefreshBooks();
+            });
         }
 
         public async void RefreshBooks (int genreId = 0, int page = 0)
@@ -39,16 +44,28 @@ namespace WPF.Reader.Service
             idGenres.Add(genreId);
             var genreRequest = genreId == 0 ? null : idGenres;
             List<BookDTO> books = await this.bookApi.BookGetBooksAsync(offset : page,idGenres : genreRequest);
-            this.Books.Clear();
-            books.ForEach(book => this.Books.Add(book));
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (books != null)
+                {
+                this.Books.Clear();
+                books.ForEach(book => this.Books.Add(book));
+                }
+            });
         }
 
         public async void RefreshGenres ()
         {
             List<GenreDTO> genres = await this.genreApi.GenreGetGenresAsync();
-            this.Genres.Clear();
-            this.Genres.Add(new GenreDTO());
-            genres.ForEach(gen => this.Genres.Add(gen));
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if(genres != null)
+                {
+                    this.Genres.Clear();
+                    this.Genres.Add(new GenreDTO());
+                    genres.ForEach(gen => this.Genres.Add(gen));
+                }
+            });
         } 
 
 
